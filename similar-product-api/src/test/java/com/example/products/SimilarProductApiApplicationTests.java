@@ -8,7 +8,7 @@ class SimilarProductApiApplicationTests {
 
 	@Test
 	void contextLoads() {
-		return AssertTrue(true);
+		assert true;
 	}
 
 }
