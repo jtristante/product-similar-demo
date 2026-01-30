@@ -53,6 +53,16 @@ GET /product/{productId}/similar
 
 ---
 
+## Caching
+
+The application uses **Caffeine** for high-performance caching to reduce load on downstream APIs and improve response times:
+
+* Caches similar product IDs
+* Caches individual product details
+* Reduces redundant external API calls for frequently accessed products
+
+---
+
 ## Architectural Challenge
 
 The main technical challenge is the classic **N+1 calls problem**:
@@ -124,8 +134,16 @@ product-similar-demo/
 │       HTTP Client        │
 │ GET /product/123/similar │
 └─────────────┬────────────┘
-              │
-              ▼
+               │
+               ▼
+┌───────────────────────────────┐
+│  Cache Layer (Caffeine)       │
+│  - Checks cache for data      │
+│  - Returns on hit, forwards   │
+│    to service on miss          │
+└─────────────┬─────────────────┘
+               │
+               ▼
 ┌──────────────────────────┐
 │  Controller (Spring)     │
 │ - Injects ProductService │
@@ -207,6 +225,7 @@ Any modifications are licensed under this project’s license.
 * Provide a realistic backend orchestration example
 * Serve as a reference for architectural discussions
 * Enable experimentation with resilience and performance
+* Leverage **Caffeine caching** to optimize performance
 
 ---
 
