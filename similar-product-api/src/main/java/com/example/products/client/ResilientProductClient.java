@@ -2,6 +2,7 @@ package com.example.products.client;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +19,7 @@ public class ResilientProductClient implements ProductClient {
 
 	private final ProductClient productClient;
 
-	public ResilientProductClient(ProductClient productClient) {
+	public ResilientProductClient(@Qualifier("cachedProductClient") ProductClient productClient) {
 		this.productClient = productClient;
 	}
 
