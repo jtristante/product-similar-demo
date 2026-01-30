@@ -85,7 +85,26 @@ This repository explores **two different implementation strategies** for solving
 
 ### Approach
 
+- Blocking HTTP client
+- `CompletableFuture.supplyAsync`
+- **Dedicated ExecutorService (Bulkhead pattern)**
+- Resilience4j:
+   - Circuit Breaker
+   - Timeout
+   - Retry (optional)
+
 ### Characteristics
+
+- Familiar and easy to reason about
+- One platform thread per blocking call
+- Scalability limited by thread pool size
+- Explicit error handling and result aggregation
+
+### When this approach makes sense
+
+- Small to medium concurrency (10–20 calls)
+- Existing blocking codebase
+- Java ≤ 17 environments
 
 ---
 
@@ -93,8 +112,24 @@ This repository explores **two different implementation strategies** for solving
 
 ### Approach
 
+- Blocking HTTP client (same as Java 17)
+- **Virtual Threads**
+- **Structured Concurrency**
+- Scoped Values for context propagation
+- Resilience4j (same policies as Java 17)
+
 ### Characteristics
 
+- One virtual thread per request
+- Much lower memory and scheduling overhead
+- Automatic cancellation and error propagation
+- Cleaner, more readable concurrency code
+
+### When this approach shines
+
+- High concurrency scenarios
+- Simpler mental model than async chains
+- Future-proof architecture
 
 ---
 
