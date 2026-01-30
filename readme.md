@@ -1,8 +1,8 @@
-# Product Similar Demo
+# Concurrency Playground Java
 
 ## Overview
 
-This repository contains **`product-similar-demo`**, a technical playground project whose goal is to **design, implement and compare two backend solutions** for the same business problem using:
+This repository contains **`concurrency-playground-java`**, a technical playground project whose goal is to **design, implement and compare two backend solutions** for the same business problem using:
 
 * **Java 17** (classic concurrency: `CompletableFuture` + dedicated executors)
 * **Java 25** (modern concurrency: Virtual Threads + Structured Concurrency)
