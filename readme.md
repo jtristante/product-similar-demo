@@ -34,7 +34,7 @@ The new endpoint is built by orchestrating two existing backend APIs:
    Returns the detailed information of a product given its ID.
 
 📄 **Existing APIs documentation**
-👉 [`existingApis.yaml`](./existingApis.yaml)
+👉 [`existingApis.yaml`](api-simulator/existingApis.yaml)
 
 ---
 
@@ -87,7 +87,7 @@ This repository explores **two different implementation strategies** for solving
 
 - Blocking HTTP client
 - `CompletableFuture.supplyAsync`
-- **Dedicated ExecutorService (Bulkhead pattern)**
+- **Dedicated ExecutorService **
 - Resilience4j:
    - Circuit Breaker
    - Timeout
@@ -135,9 +135,13 @@ This repository explores **two different implementation strategies** for solving
 
 ## Comparison Summary
 
-| Aspect | Java 17 | Java 25 |
-| -- |---------|---------|
-|    |         |         |
+### Java 17 (`CompletableFuture` + dedicated executors) Results
+![ResultsJava17.png](assets/ResultsJava17.png)
+![GraphanaJava17.png](assets/GraphanaJava17.png)
+
+### Java 25 (Virtual Threads + Structured Concurrency) Results 
+![ResultsJava25.png](assets/ResultsJava25.png)
+![GraphanaJava25.png](assets/GraphanaJava25.png)
 
 ---
 
@@ -169,16 +173,16 @@ product-similar-demo/
 │       HTTP Client        │
 │ GET /product/123/similar │
 └─────────────┬────────────┘
-               │
-               ▼
+              │
+              ▼
 ┌───────────────────────────────┐
 │  Cache Layer (Caffeine)       │
 │  - Checks cache for data      │
 │  - Returns on hit, forwards   │
-│    to service on miss          │
+│    to service on miss         │
 └─────────────┬─────────────────┘
-               │
-               ▼
+              │
+              ▼
 ┌──────────────────────────┐
 │  Controller (Spring)     │
 │ - Injects ProductService │
@@ -251,6 +255,24 @@ This project integrates code from
 📜 **License note**
 This project integrates `backendDevTest` code (Apache 2.0).
 Any modifications are licensed under this project’s license.
+
+### How run the benchmark 
+
+1-  Start the mocks and other needed infrastructure with the following command.
+```bash
+# To start mocks:
+docker compose up -d simulado influxdb grafana
+```
+
+2- Check that mocks are working with a sample request to http://localhost:3001/product/1/similarids.
+
+3- Execute the test run.
+```bash
+# To execute the test run:
+docker compose run --rm k6 run scripts/test.js
+```
+
+4- Browse http://localhost:3000/d/Le2Ku9NMk/k6-performance-test to view the results.
 
 ---
 
